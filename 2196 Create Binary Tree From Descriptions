@@ -1,0 +1,37 @@
+You are given a 2D integer array descriptions where descriptions[i] = [parenti, childi, isLefti] indicates that parenti is the parent of childi in a binary tree of unique values. Furthermore,
+
+If isLefti == 1, then childi is the left child of parenti.
+If isLefti == 0, then childi is the right child of parenti.
+Construct the binary tree described by descriptions and return its root.
+
+The test cases will be generated such that the binary tree is valid.
+
+class Solution {
+public:
+    TreeNode* createBinaryTree(vector<vector<int>>& des) {
+        unordered_map <int, TreeNode*> mp;
+
+        unordered_set <int> parent, child;
+
+        for(int i=0; i<des.size(); i++)
+        {
+            if( mp.count( des[i][0] ) == 0 )
+                mp[ des[i][0] ] = new TreeNode( des[i][0] );
+
+            if( mp.count( des[i][1] ) == 0 )
+                mp[ des[i][1] ] = new TreeNode( des[i][1] );
+
+            if( des[i][2] == 1 )    mp[ des[i][0] ] -> left = mp[ des[i][1] ];
+            else  mp[ des[i][0] ] -> right = mp[ des[i][1] ];
+
+            parent.insert( des[i][0] );
+            child.insert( des[i][1] );
+        }
+
+        for(auto x: parent)
+            if( child.count(x) == 0 )
+                return mp[ x ];
+
+        return nullptr;
+    }
+};
