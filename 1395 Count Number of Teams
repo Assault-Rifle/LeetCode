@@ -1,0 +1,40 @@
+Problem:
+There are n soldiers standing in a line. Each soldier is assigned a unique rating value.
+
+You have to form a team of 3 soldiers amongst them under the following rules:
+
+Choose 3 soldiers with index (i, j, k) with rating (rating[i], rating[j], rating[k]).
+A team is valid if: (rating[i] < rating[j] < rating[k]) or (rating[i] > rating[j] > rating[k]) where (0 <= i < j < k < n).
+Return the number of teams you can form given the conditions. (soldiers can be part of multiple teams).
+
+
+Approach:
+Team consist of 3 soldiers
+pick the middle soldier
+for the case ( rating[ j ] < rating[ i ] < rating[ k ] ), find number of soldiers have rating smaller than i in left of it, and number of soldiers have rating higher than i in right of it
+multiply these two values. This gives total possible unique combinations of team of 3 soldiers with middle soldier fixed
+Similarly calculate for the case ( rating[ j ] > rating[ i ] > rating[ k ] )
+Add the values from both of the above cases
+We can store the values for both the cases simultaneously using two arrays of size 2
+
+Solution:
+class Solution {
+public:
+    int numTeams(vector<int>& rating)
+    {
+        int count=0, n=rating.size();
+
+        for(int i=1; i<n-1; i++)
+        {
+            int L[2]={0}, R[2]={0};
+
+            for(int j=0; j<i; j++)  L[ rating[i] > rating[j] ]++;
+            
+            for(int k=i+1; k<n; k++)    R[ rating[k] > rating[i] ]++;
+
+            count += L[0]*R[0] + L[1]*R[1];
+        }
+
+        return count;
+    }
+};
