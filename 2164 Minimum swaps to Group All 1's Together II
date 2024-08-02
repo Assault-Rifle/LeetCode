@@ -1,0 +1,50 @@
+A swap is defined as taking two distinct positions in an array and swapping the values in them.
+
+A circular array is defined as an array where we consider the first element and the last element to be adjacent.
+
+Given a binary circular array nums, return the minimum number of swaps required to group all 1's present in the array together at any location.
+
+
+Approach:
+Count how many 1's are present, we want to club all these 1's together
+
+Now imagine a window of fixed size equalant to number of 1's
+
+Slide it in the array curcularly
+
+Find the number of 0's in each window of fixed size
+
+Record the minimum number of zeros among each window
+
+This is basically how many minimum swaps needed
+
+Time: O(2n+n) ~ O(n)
+Space: O(1)
+
+
+Code:
+class Solution {
+public:
+    int minSwaps(vector<int>& nums)
+    {
+        int ones=0, zeros=0, res=INT_MAX, n=nums.size();
+
+        for(auto x: nums)   if(x==1)    ones++;
+
+        for(int i=0; i<ones; i++)
+            if(nums[i]==0)  zeros++;
+
+        res = min(res, zeros); 
+
+        for(int i=ones; i<2*n-1; i++)
+        {
+            if(nums[i%n]==0)    zeros++;
+
+            if(nums[ (i-ones)%n ] == 0 )    zeros--;
+
+            res = min(res, zeros);
+        }
+
+        return res;
+    }
+};
